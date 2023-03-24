@@ -1,7 +1,7 @@
 { lib, bundlerEnv, bundlerUpdateScript, ruby, perl, autoconf }:
 
 bundlerEnv {
-  name = "chef-dk-4.13.3";
+  name = "chef-workstation-23.3.1031";
   # Do not change this to pname & version until underlying issues with Ruby
   # packaging are resolved ; see https://github.com/NixOS/nixpkgs/issues/70171
 
@@ -10,14 +10,13 @@ bundlerEnv {
 
   buildInputs = [ perl autoconf ];
 
-  passthru.updateScript = bundlerUpdateScript "chefdk";
+  passthru.updateScript = bundlerUpdateScript "chef-workstation";
 
   meta = with lib; {
-    description = "A streamlined development and deployment workflow for Chef platform";
-    homepage    = "https://downloads.chef.io/chef-dk/";
+    description = "Chef Workstation gives you everything you need to get started with Chef, so you can automate how you audit, configure, and manage applications end environments.";
+    homepage    = "https://docs.chef.io/workstation/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ offline nicknovitski ];
+    maintainers = with maintainers; [ dylanmtaylor ];
     platforms   = platforms.unix;
-    badPlatforms = [ "aarch64-linux" ];
   };
 }
