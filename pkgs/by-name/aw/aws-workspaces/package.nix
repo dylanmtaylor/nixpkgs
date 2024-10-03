@@ -16,6 +16,7 @@
   gdk-pixbuf,
   libsoup,
   glib-networking,
+  gsettings-desktop-schemas,
   graphicsmagick_q16,
   libva,
   libusb1,
@@ -33,6 +34,9 @@
   xorg,
   libfido2,
   webkitgtk_4_1,
+  copyDesktopItems,
+  glib,
+  wrapGAppsHook,
   atk,
 }:
 
@@ -50,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     makeWrapper
+    wrapGAppsHook
   ];
 
   # Crashes at startup when stripping:
@@ -64,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg_6.lib
     gdk-pixbuf
     glib-networking
+    gsettings-desktop-schemas
     graphicsmagick_q16
     gtk3
     hiredis
@@ -93,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   unpackPhase = ''
     runHook preUnpack
     ${dpkg}/bin/dpkg -x $src $out
+    mv $out/usr/share $out/share
     runHook postUnpack
   '';
 
@@ -108,6 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     mv $out/usr/bin/workspacesclient $out/bin/workspacesclient
     runHook postInstall
+  '';
+
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
   meta = with lib; {
